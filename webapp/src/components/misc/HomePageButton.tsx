@@ -1,9 +1,7 @@
-import { Button, Grid, SvgIconTypeMap, Typography } from "@material-ui/core";
-import { OverridableComponent } from "@material-ui/core/OverridableComponent";
+import { Button, Typography } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router";
 import { styles } from "../../styles";
-import PageTemplate from "../layouts/PageTemplate";
 
 declare interface HomePageButtonProps {
   label: string;

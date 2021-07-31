@@ -3,7 +3,7 @@ import PageTemplate from "../layouts/PageTemplate";
 
 declare interface SettingsPageProps {}
 
-const SettingsPage: React.FunctionComponent<SettingsPageProps> = ({}) => {
+const SettingsPage: React.FunctionComponent<SettingsPageProps> = () => {
   return <PageTemplate heading="Settings"></PageTemplate>;
 };
 
