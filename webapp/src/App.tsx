@@ -1,18 +1,17 @@
-import { Card, Container, Paper, Typography } from "@material-ui/core";
-import React, { Fragment } from "react";
+import { Container } from "@material-ui/core";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import LeftMenu from "./components/layouts/LeftMenu";
 import NavBar from "./components/layouts/NavBar";
 import BugReportFab from "./components/misc/BugReportFab";
 import NotificationBar, {
   NotificationMessage,
 } from "./components/misc/Notifications";
-import { styles } from "./styles";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Error404Page from "./components/pages/Error404Page";
-import LeftMenu from "./components/layouts/LeftMenu";
-import HomePage from "./components/pages/HomePage";
 import AboutPage from "./components/pages/AboutPage";
-import ReportBunPage from "./components/pages/ReportBunPage";
+import Error404Page from "./components/pages/Error404Page";
 import FindBunsPage from "./components/pages/FindBunsPage";
+import HomePage from "./components/pages/HomePage";
+import ReportBunPage from "./components/pages/ReportBunPage";
 import SettingsPage from "./components/pages/SettingsPage";
 
 declare interface AppProps {
@@ -21,8 +20,6 @@ declare interface AppProps {
 }
 
 const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
-  const classes = styles();
-
   const [notification, setNotification] =
     React.useState<NotificationMessage>(null);
 

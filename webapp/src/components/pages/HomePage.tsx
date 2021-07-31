@@ -7,7 +7,7 @@ import HomePageButton from "../misc/HomePageButton";
 
 declare interface HomePageProps {}
 
-const HomePage: React.FunctionComponent<HomePageProps> = ({}) => {
+const HomePage: React.FunctionComponent<HomePageProps> = () => {
   const classes = styles();
 
   return (
