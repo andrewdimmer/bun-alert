@@ -12,12 +12,12 @@ import BunnyEmoji from "../misc/BunnyEmoji";
 
 declare interface BunSightingInfoProps {
   bun: BunSighting;
-  index: number;
+  now: number;
 }
 
 const BunSightingInfo: React.FunctionComponent<BunSightingInfoProps> = ({
   bun,
-  index,
+  now,
 }) => {
   const otherBuns =
     bun.numberOfBuns > 1
@@ -25,14 +25,23 @@ const BunSightingInfo: React.FunctionComponent<BunSightingInfoProps> = ({
       : "";
   const primaryText = `${bun.rankOfSmallestBun}${otherBuns} sighted nearby!`;
 
+  const minutesSinceSighting = Math.trunc((now - bun.timeOfSighting) / 60000);
+  const minutesSinceSightingText =
+    minutesSinceSighting === 0
+      ? "just now"
+      : `${minutesSinceSighting} minute${
+          minutesSinceSighting > 1 ? "s" : ""
+        } ago`;
+  const secondaryText = `Sighted ${minutesSinceSightingText}`;
+
   return (
-    <ListItem key={`bun_sighting_${index}`}>
+    <ListItem>
       <ListItemAvatar>
         <Avatar>
           <BunnyEmoji />
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={primaryText} secondary="" />
+      <ListItemText primary={primaryText} secondary={secondaryText} />
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="open in maps">
           <MapIcon />
