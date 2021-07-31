@@ -21,15 +21,13 @@ const LeftMenuItem: React.FunctionComponent<LeftMenuItemProps> = ({
     <ListItem
       button
       key={`menu_item_${label.toLowerCase().replaceAll(" ", "_")}`}
+      onClick={() => {
+        routeHistory.push(route);
+        closeLeftMenu();
+      }}
     >
       {icon && <ListItemIcon>{icon}</ListItemIcon>}
-      <ListItemText
-        primary={label}
-        onClick={() => {
-          routeHistory.push(route);
-          closeLeftMenu();
-        }}
-      />
+      <ListItemText primary={label} />
     </ListItem>
   );
 };
