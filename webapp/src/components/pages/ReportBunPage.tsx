@@ -10,11 +10,11 @@ declare interface ReportBunPageProps {}
 const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = () => {
   const classes = styles();
 
-  const [numberOfBuns, setNumberOfBuns] = React.useState<number>(0);
+  const [numberOfBuns, setNumberOfBuns] = React.useState<number | "">("");
   const [rankOfSmallestBun, setRankOfSmallestBun] = React.useState<string>("");
 
   const hasError = () => {
-    return numberOfBuns <= 0 || rankOfSmallestBun === "";
+    return numberOfBuns === "" || numberOfBuns <= 0 || rankOfSmallestBun === "";
   };
 
   const clear = () => {
@@ -27,10 +27,10 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = () => {
       {/* Number of Buns */}
       <TextField
         className={classes.marginedTopBottom}
-        error={numberOfBuns <= 0}
+        error={numberOfBuns === "" || numberOfBuns <= 0}
         fullWidth
         helperText={
-          numberOfBuns <= 0 && (
+          (numberOfBuns === "" || numberOfBuns <= 0) && (
             <Fragment>
               <Error fontSize="inherit" />
               {" There must be at least one bun!"}
@@ -40,10 +40,14 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = () => {
         id={`enter-number-of-buns`}
         label="Number of Buns"
         onChange={(event) => {
-          setNumberOfBuns(parseInt(event.target.value));
+          const value =
+            event.target.value !== ""
+              ? Math.trunc(parseFloat(event.target.value))
+              : "";
+          setNumberOfBuns(value);
         }}
         type="number"
-        value={numberOfBuns}
+        value={numberOfBuns.toString()}
         variant="outlined"
       />
       {/* Size of Smallest Bun */}
@@ -124,7 +128,11 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = () => {
         disabled={hasError()}
         fullWidth
         onClick={() => {
-          recordBunSighting({ numberOfBuns, rankOfSmallestBun });
+          recordBunSighting({
+            numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
+            rankOfSmallestBun,
+            timeOfSighting: Date.now(),
+          });
           clear();
         }}
         variant="contained"
