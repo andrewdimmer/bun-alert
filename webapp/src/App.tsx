@@ -13,6 +13,7 @@ import FindBunsPage from "./components/pages/FindBunsPage";
 import HomePage from "./components/pages/HomePage";
 import ReportBunPage from "./components/pages/ReportBunPage";
 import SettingsPage from "./components/pages/SettingsPage";
+import { listenForNewBunSightings } from "./scripts/listenForNewBunSightings";
 
 declare interface AppProps {
   theme: "light" | "dark";
@@ -20,9 +21,11 @@ declare interface AppProps {
 }
 
 const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
+  // In App Notifications
   const [notification, setNotification] =
     React.useState<NotificationMessage>(null);
 
+  // Let Menu
   const [leftMenuOpen, setLeftMenuOpen] = React.useState<boolean>(false);
 
   const toggleLeftMenu = () => {
@@ -32,6 +35,34 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
   const closeLeftMenu = () => {
     setLeftMenuOpen(false);
   };
+
+  // Location Services
+  const [accessToLocationServices, setAccessToLocationServices] =
+    React.useState<boolean>();
+
+  if (accessToLocationServices === undefined) {
+    navigator.geolocation.getCurrentPosition(
+      () => {
+        setAccessToLocationServices(true);
+      },
+      () => {
+        setAccessToLocationServices(false);
+      }
+    );
+  }
+
+  // Firestore Buns
+  const [nearbyBuns, setNearbyBuns] = React.useState<BunSighting[]>([]);
+
+  React.useEffect(() => {
+    const bunListener = listenForNewBunSightings(
+      setNearbyBuns,
+      setNotification
+    );
+    return () => {
+      bunListener();
+    };
+  }, []);
 
   return (
     <Router>
@@ -49,10 +80,17 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
             <AboutPage />
           </Route>
           <Route path="/report-bun" exact>
-            <ReportBunPage setNotification={setNotification} />
+            <ReportBunPage
+              accessToLocationServices={accessToLocationServices}
+              setNotification={setNotification}
+            />
           </Route>
           <Route path="/find-buns" exact>
-            <FindBunsPage setNotification={setNotification} />
+            <FindBunsPage
+              accessToLocationServices={accessToLocationServices}
+              nearbyBuns={nearbyBuns}
+              setNotification={setNotification}
+            />
           </Route>
           <Route path="/settings" exact>
             <SettingsPage />

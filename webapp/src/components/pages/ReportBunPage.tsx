@@ -6,29 +6,38 @@ import { Error } from "@material-ui/icons";
 import { recordBunSighting } from "../../scripts/recordBunSighting";
 import RequireLocationServices from "../misc/RequireLocationServices";
 import { SetNotificationMessageProps } from "../misc/Notifications";
+import { nanoid } from "nanoid";
 
-declare interface ReportBunPageProps extends SetNotificationMessageProps {}
+declare interface ReportBunPageProps
+  extends RequiresAccessToLocationServices,
+    SetNotificationMessageProps {}
 
 const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
+  accessToLocationServices,
   setNotification,
 }) => {
   const classes = styles();
 
   const [numberOfBuns, setNumberOfBuns] = React.useState<number | "">("");
-  const [rankOfSmallestBun, setRankOfSmallestBun] = React.useState<string>("");
+  const [rankOfSmallestBun, setRankOfSmallestBun] = React.useState<
+    BunRanks | ""
+  >("");
 
   const hasError = () => {
     return numberOfBuns === "" || numberOfBuns <= 0 || rankOfSmallestBun === "";
   };
 
   const clear = () => {
-    setNumberOfBuns(0);
+    setNumberOfBuns("");
     setRankOfSmallestBun("");
   };
 
   return (
     <PageTemplate heading="Report a Bun Sighting" title="Report Bun">
-      <RequireLocationServices message="We need to know where you've found your bun... please enable location services to report a bun sighting.">
+      <RequireLocationServices
+        accessToLocationServices={accessToLocationServices}
+        message="We need to know where you've found your bun... please enable location services to report a bun sighting."
+      >
         {/* Number of Buns */}
         <TextField
           className={classes.marginedTopBottom}
@@ -71,7 +80,7 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
           id={`select-rank-of-buns`}
           label="Select the Approximate Length from Head to Tail of the Smallest Bun"
           onChange={(event) => {
-            setRankOfSmallestBun(event.target.value);
+            setRankOfSmallestBun(event.target.value as BunRanks | "");
           }}
           select
           value={rankOfSmallestBun}
@@ -135,13 +144,20 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
           onClick={() => {
             navigator.geolocation.getCurrentPosition(
               (location) => {
-                recordBunSighting({
-                  numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
-                  rankOfSmallestBun,
-                  timeOfSighting: Date.now(),
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                });
+                recordBunSighting(
+                  {
+                    id: nanoid(),
+                    numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
+                    rankOfSmallestBun:
+                      rankOfSmallestBun !== ""
+                        ? rankOfSmallestBun
+                        : "Peasent Bun",
+                    timeOfSighting: Date.now(),
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                  },
+                  setNotification
+                );
                 clear();
               },
               (error) => {

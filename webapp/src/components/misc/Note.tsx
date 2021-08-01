@@ -3,7 +3,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import ErrorIcon from "@material-ui/icons/Error";
 import InfoIcon from "@material-ui/icons/Info";
 import WarningIcon from "@material-ui/icons/Warning";
-import React, { Fragment } from "react";
+import React from "react";
 import { styles } from "../../styles";
 
 declare interface NoteProps {
