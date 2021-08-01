@@ -66,6 +66,7 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
           value={numberOfBuns.toString()}
           variant="outlined"
         />
+
         {/* Size of Smallest Bun */}
         <TextField
           className={classes.marginedTopBottom}
@@ -128,6 +129,7 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
             );
           })}
         </TextField>
+
         {/* Bun Rank */}
         <TextField
           className={classes.marginedTopBottom}

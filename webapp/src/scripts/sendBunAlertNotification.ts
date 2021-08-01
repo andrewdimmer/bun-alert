@@ -1,3 +1,6 @@
+import { getBunRankNumberFromBunRankName } from "../data/bunRankNameToNumber";
+import { getStoredNotificationFilter } from "../data/storedSettings";
+
 export const browserSupportsNotifications = "Notification" in window;
 
 const addBunnyEmojis = (numberOfBuns: number) => {
@@ -9,7 +12,12 @@ const addBunnyEmojis = (numberOfBuns: number) => {
 };
 
 export const sendBunAlertNotification = (bun: PreProcessedBunSighting) => {
-  if (browserSupportsNotifications && Notification.permission === "granted") {
+  if (
+    browserSupportsNotifications &&
+    Notification.permission === "granted" &&
+    getBunRankNumberFromBunRankName(bun.rankOfSmallestBun) <=
+      getStoredNotificationFilter()
+  ) {
     const notificationDistanceText = bun.distanceAwayText
       ? ` ${bun.distanceAwayText}`
       : "";
