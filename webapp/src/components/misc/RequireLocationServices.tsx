@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import Note from "./NoteTemplates";
+import Note from "./Note";
 
 declare interface RequireLocationServicesProps {
   prefix?: string;
