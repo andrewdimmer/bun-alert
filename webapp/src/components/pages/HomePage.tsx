@@ -17,20 +17,24 @@ const HomePage: React.FunctionComponent<HomePageProps> = () => {
       </Typography>
       <HomePageButton
         label="Learn More About Bun Alert"
-        route="/about"
+        route="/bun-alert/about"
         icon={Info}
       />
       <HomePageButton
         label="Report a Bun Sighting"
-        route="/report-bun"
+        route="/bun-alert/report-bun"
         icon={Room}
       />
       <HomePageButton
         label="Find Nearby Buns"
-        route="/find-buns"
+        route="/bun-alert/find-buns"
         icon={Search}
       />
-      <HomePageButton label="Settings" route="/settings" icon={Settings} />
+      <HomePageButton
+        label="Settings"
+        route="/bun-alert/settings"
+        icon={Settings}
+      />
     </PageTemplate>
   );
 };
