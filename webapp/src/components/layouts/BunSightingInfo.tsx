@@ -9,13 +9,14 @@ import {
 import MapIcon from "@material-ui/icons/Map";
 import { getDistance } from "geolib";
 import React from "react";
+import { getGoogleMapsDirections } from "../../helpers/getGoogleMapsDirections";
 import { metersToMiles } from "../../helpers/metersToMiles";
 import BunnyEmoji from "../misc/BunnyEmoji";
 
 declare interface BunSightingInfoProps {
   bun: BunSighting;
   now: number;
-  location: { latitude: number; longitude: number } | undefined;
+  location: GeoLocation | undefined;
 }
 
 const BunSightingInfo: React.FunctionComponent<BunSightingInfoProps> = ({
@@ -59,7 +60,16 @@ const BunSightingInfo: React.FunctionComponent<BunSightingInfoProps> = ({
       </ListItemAvatar>
       <ListItemText primary={primaryText} secondary={secondaryText} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="open in maps">
+        <IconButton
+          edge="end"
+          aria-label="open in maps"
+          disabled={!location}
+          onClick={() => {
+            if (location) {
+              window.open(getGoogleMapsDirections(bun, location), "_blank");
+            }
+          }}
+        >
           <MapIcon />
         </IconButton>
       </ListItemSecondaryAction>
