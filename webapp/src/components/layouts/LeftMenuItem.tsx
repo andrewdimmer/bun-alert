@@ -11,7 +11,7 @@ declare interface LeftMenuItemProps {
 
 const LeftMenuItem: React.FunctionComponent<LeftMenuItemProps> = ({
   label,
-  route = label.toLowerCase().replaceAll(" ", "-"),
+  route = `/bun-alert/${label.toLowerCase().replaceAll(" ", "-")}`,
   icon,
   closeLeftMenu,
 }) => {

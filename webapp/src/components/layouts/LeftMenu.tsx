@@ -5,9 +5,9 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
+import { Home, Info, Room, Search, Settings } from "@material-ui/icons";
 import React from "react";
 import LeftMenuItem from "./LeftMenuItem";
-import { Home, Info, Room, Search, Settings } from "@material-ui/icons";
 
 declare interface LeftMenuProps {
   open: boolean;
@@ -37,12 +37,12 @@ const LeftMenu: React.FunctionComponent<LeftMenuProps> = ({
       <List className={classes.root}>
         <LeftMenuItem
           label="Home"
-          route="/"
+          route="/bun-alert/"
           icon={<Home />}
           closeLeftMenu={closeLeftMenu}
         />
         <LeftMenuItem
-          label="About"
+          label={"About"}
           icon={<Info />}
           closeLeftMenu={closeLeftMenu}
         />

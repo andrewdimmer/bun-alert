@@ -45,10 +45,17 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
 
   if (accessToLocationServices === undefined) {
     navigator.geolocation.getCurrentPosition(
-      () => {
+      (location) => {
         setAccessToLocationServices(true);
+        const newLocation = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+        setLocation(newLocation);
+        setPreLoadedLocation(newLocation);
       },
-      () => {
+      (error) => {
+        console.log(error);
         setAccessToLocationServices(false);
       }
     );
@@ -111,26 +118,26 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
           notificationFilter={notificationFilter}
         />
         <Switch>
-          <Route path="/" exact>
+          <Route path="/bun-alert/" exact>
             <HomePage />
           </Route>
-          <Route path="/about" exact>
+          <Route path="/bun-alert/about" exact>
             <AboutPage />
           </Route>
-          <Route path="/report-bun" exact>
+          <Route path="/bun-alert/report-bun" exact>
             <ReportBunPage
               accessToLocationServices={accessToLocationServices}
               setNotification={setNotification}
             />
           </Route>
-          <Route path="/find-buns" exact>
+          <Route path="/bun-alert/find-buns" exact>
             <FindBunsPage
               accessToLocationServices={accessToLocationServices}
               location={location}
               allBuns={allBuns}
             />
           </Route>
-          <Route path="/settings" exact>
+          <Route path="/bun-alert/settings" exact>
             <SettingsPage
               notificationFilter={notificationFilter}
               setNotificationFilter={setNotificationFilter}
