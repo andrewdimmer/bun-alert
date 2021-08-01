@@ -4,6 +4,7 @@ import { styles } from "../../styles";
 import PageTemplate from "../layouts/PageTemplate";
 import { Error } from "@material-ui/icons";
 import { recordBunSighting } from "../../scripts/recordBunSighting";
+import RequireLocationServices from "../misc/RequireLocationServices";
 
 declare interface ReportBunPageProps {}
 
@@ -24,6 +25,7 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = () => {
 
   return (
     <PageTemplate heading="Report a Bun Sighting" title="Report Bun">
+      <RequireLocationServices message="We need to know where you've found your bun... please enable location services to report a bun sighting.">
       {/* Number of Buns */}
       <TextField
         className={classes.marginedTopBottom}
@@ -139,6 +141,7 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = () => {
       >
         <Typography variant="h5">Submit Bun Sighting</Typography>
       </Button>
+      </RequireLocationServices>
     </PageTemplate>
   );
 };

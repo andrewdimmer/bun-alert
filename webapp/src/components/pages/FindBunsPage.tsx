@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import { getBuns } from "../../data/localBuns";
 import BunSightingInfo from "../layouts/BunSightingInfo";
 import PageTemplate from "../layouts/PageTemplate";
+import RequireLocationServices from "../misc/RequireLocationServices";
 
 declare interface FindBunsPageProps {}
 
@@ -21,16 +22,18 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = () => {
 
   return (
     <PageTemplate heading="Find Nearby Buns!" title="Find Buns">
-      <List>
-        {nearbyBuns.map((bun, index, array) => {
-          return (
-            <Fragment key={`bun_sighting_${index}`}>
-              <BunSightingInfo bun={bun} now={now} />
-              {index !== array.length - 1 && <Divider />}
-            </Fragment>
-          );
-        })}
-      </List>
+      <RequireLocationServices message="We need to know where you are to show you nearby buns... please enable location services to find buns.">
+        <List>
+          {nearbyBuns.map((bun, index, array) => {
+            return (
+              <Fragment key={`bun_sighting_${index}`}>
+                <BunSightingInfo bun={bun} now={now} />
+                {index !== array.length - 1 && <Divider />}
+              </Fragment>
+            );
+          })}
+        </List>
+      </RequireLocationServices>
     </PageTemplate>
   );
 };
