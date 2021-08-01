@@ -7,10 +7,12 @@ import InfoIcon from "@material-ui/icons/Info";
 import WarningIcon from "@material-ui/icons/Warning";
 
 declare interface NotificationInfoManagerProps
-  extends RequiresAccessToLocationServices {}
+  extends RequiresAccessToLocationServices {
+  notificationFilter: number;
+}
 
 const NotificationInfoManager: React.FunctionComponent<NotificationInfoManagerProps> =
-  ({ accessToLocationServices }) => {
+  ({ accessToLocationServices, notificationFilter }) => {
     const classes = styles();
 
     const [allowNotifications, setAllowNotifications] = React.useState(
@@ -20,7 +22,19 @@ const NotificationInfoManager: React.FunctionComponent<NotificationInfoManagerPr
     return browserSupportsNotifications ? (
       accessToLocationServices === true ? (
         allowNotifications === "granted" ? (
-          <Fragment />
+          notificationFilter === 0 ? (
+            <Paper className={classes.marginedPadded}>
+              <Note
+                type={"info"}
+                prefix="Do Not Disturb is on!"
+                message={
+                  'You will not receive any new Bun Alerts until you turn off Do Not Disturb on the "Settings" page. In the mean time though, you\'re free to find nearby buns yourself using the "Find Buns" page.'
+                }
+              />
+            </Paper>
+          ) : (
+            <Fragment />
+          )
         ) : (
           <Paper className={classes.marginedPadded}>
             <Grid

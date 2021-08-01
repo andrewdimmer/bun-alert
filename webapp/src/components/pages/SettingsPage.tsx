@@ -1,16 +1,23 @@
-import { TextField, Typography } from "@material-ui/core";
+import { MenuItem, TextField, Typography } from "@material-ui/core";
+import { Error } from "@material-ui/icons";
 import React, { Fragment } from "react";
 import {
   getStoredBunFilterParameters,
   setStoredBunFilterParameters,
+  setStoredNotificationFilter,
 } from "../../data/storedSettings";
 import { styles } from "../../styles";
 import PageTemplate from "../layouts/PageTemplate";
-import { Error } from "@material-ui/icons";
 
-declare interface SettingsPageProps {}
+declare interface SettingsPageProps {
+  notificationFilter: number;
+  setNotificationFilter: (notificationFilter: number) => void;
+}
 
-const SettingsPage: React.FunctionComponent<SettingsPageProps> = () => {
+const SettingsPage: React.FunctionComponent<SettingsPageProps> = ({
+  notificationFilter,
+  setNotificationFilter,
+}) => {
   const classes = styles();
 
   const [bunFilterParameters, setBunFilterParamters] =
@@ -230,6 +237,63 @@ const SettingsPage: React.FunctionComponent<SettingsPageProps> = () => {
         value={actualMaxDistance()}
         variant="outlined"
       />
+
+      <Typography variant="h4">Do Not Disturb Settings</Typography>
+      {/* Minumum Rank for Bun Alert */}
+      <TextField
+        className={classes.marginedTopBottom}
+        fullWidth
+        id={`minimum-rank-for-bun-alert`}
+        label="Select the Minimum Rank to Receive Bun Alerts for"
+        onChange={(event) => {
+          const notificationFilter = parseInt(event.target.value);
+          setNotificationFilter(notificationFilter);
+          setStoredNotificationFilter(notificationFilter);
+        }}
+        select
+        value={notificationFilter}
+        variant="outlined"
+      >
+        {[
+          {
+            label: <em>Do Not Disturb</em>,
+            value: 0,
+          },
+          {
+            label: "Baby Bun",
+            value: 1,
+          },
+          {
+            label: "King Bun",
+            value: 2,
+          },
+          {
+            label: "Queen Bun",
+            value: 3,
+          },
+          {
+            label: "Princess Bun",
+            value: 4,
+          },
+          {
+            label: "Prince Bun",
+            value: 5,
+          },
+          {
+            label: "Peasent Bun",
+            value: 6,
+          },
+        ].map((option, index) => {
+          return (
+            <MenuItem
+              key={`select-notification-filter-option-${index}`}
+              value={option.value}
+            >
+              {option.label}
+            </MenuItem>
+          );
+        })}
+      </TextField>
     </PageTemplate>
   );
 };

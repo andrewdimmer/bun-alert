@@ -15,6 +15,7 @@ import HomePage from "./components/pages/HomePage";
 import ReportBunPage from "./components/pages/ReportBunPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import { setPreLoadedLocation } from "./data/preLoadedLocation";
+import { getStoredNotificationFilter } from "./data/storedSettings";
 import { listenForNewBunSightings } from "./scripts/listenForNewBunSightings";
 
 declare interface AppProps {
@@ -92,6 +93,11 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
     };
   }, []);
 
+  // Notificaiton Filter for Do Not Disturb
+  const [notificationFilter, setNotificationFilter] = React.useState(
+    getStoredNotificationFilter()
+  );
+
   return (
     <Router>
       <NavBar
@@ -102,6 +108,7 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
       <Container>
         <NotificationInfoManager
           accessToLocationServices={accessToLocationServices}
+          notificationFilter={notificationFilter}
         />
         <Switch>
           <Route path="/" exact>
@@ -124,7 +131,10 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
             />
           </Route>
           <Route path="/settings" exact>
-            <SettingsPage />
+            <SettingsPage
+              notificationFilter={notificationFilter}
+              setNotificationFilter={setNotificationFilter}
+            />
           </Route>
           <Route>
             <Error404Page />
