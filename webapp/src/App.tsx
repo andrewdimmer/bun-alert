@@ -83,13 +83,10 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
   }, [accessToLocationServices]);
 
   // Firestore Buns
-  const [nearbyBuns, setNearbyBuns] = React.useState<BunSighting[]>([]);
+  const [allBuns, setAllBuns] = React.useState<BunSighting[]>([]);
 
   React.useEffect(() => {
-    const bunListener = listenForNewBunSightings(
-      setNearbyBuns,
-      setNotification
-    );
+    const bunListener = listenForNewBunSightings(setAllBuns, setNotification);
     return () => {
       bunListener();
     };
@@ -123,7 +120,7 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
             <FindBunsPage
               accessToLocationServices={accessToLocationServices}
               location={location}
-              nearbyBuns={nearbyBuns}
+              allBuns={allBuns}
             />
           </Route>
           <Route path="/settings" exact>
