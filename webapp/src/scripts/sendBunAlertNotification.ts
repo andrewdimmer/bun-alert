@@ -1,6 +1,3 @@
-import { getPreLoadedLocation } from "../data/preLoadedLocation";
-import { preProcessBunSighting } from "./preProcessBunSightings";
-
 export const browserSupportsNotifications = "Notification" in window;
 
 const addBunnyEmojis = (numberOfBuns: number) => {
@@ -11,14 +8,8 @@ const addBunnyEmojis = (numberOfBuns: number) => {
   return bunnies;
 };
 
-export const sendBunAlertNotification = (bunSighting: BunSighting) => {
+export const sendBunAlertNotification = (bun: PreProcessedBunSighting) => {
   if (browserSupportsNotifications && Notification.permission === "granted") {
-    const bun = preProcessBunSighting(
-      bunSighting,
-      Date.now(),
-      getPreLoadedLocation()
-    );
-
     const notificationDistanceText = bun.distanceAwayText
       ? ` ${bun.distanceAwayText}`
       : "";
