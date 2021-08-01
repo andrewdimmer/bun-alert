@@ -1,24 +1,22 @@
 import { Divider, List } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { preProcessBunSighting } from "../../scripts/preProcessBunSightings";
 import BunSightingInfo from "../layouts/BunSightingInfo";
+import Note from "../layouts/Note";
 import PageTemplate from "../layouts/PageTemplate";
-import Note from "../misc/Note";
-import { SetNotificationMessageProps } from "../misc/Notifications";
 import RequireLocationServices from "../misc/RequireLocationServices";
 
-declare interface FindBunsPageProps
-  extends RequiresAccessToLocationServices,
-    SetNotificationMessageProps {
+declare interface FindBunsPageProps extends RequiresAccessToLocationServices {
+  location: GeoLocation | undefined;
   nearbyBuns: BunSighting[];
 }
 
 const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
   accessToLocationServices,
+  location,
   nearbyBuns,
-  setNotification,
 }) => {
   const [now, setNow] = React.useState<number>(Date.now());
-  const [location, setLocation] = React.useState<GeoLocation>();
 
   // Time refresher
   React.useEffect(() => {
@@ -30,33 +28,11 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
     };
   }, []);
 
-  // Location refresher
-  React.useEffect(() => {
-    const locationListener = navigator.geolocation.watchPosition(
-      (location) => {
-        setLocation({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        });
-      },
-      (error) => {
-        console.log(error);
-        setNotification({
-          type: "error",
-          message:
-            "Unable to get your location to find buns nearby. Please try again.",
-        });
-      }
-    );
-    return () => {
-      navigator.geolocation.clearWatch(locationListener);
-    };
-  }, [setNotification]);
-
   return (
     <PageTemplate heading="Find Nearby Buns!" title="Find Buns">
       <RequireLocationServices
         accessToLocationServices={accessToLocationServices}
+        prefix="Location Services are required to find nearby buns!"
         message="We need to know where you are to show you nearby buns... please enable location services to find buns."
       >
         {nearbyBuns.length > 0 ? (
@@ -64,7 +40,9 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
             {nearbyBuns.map((bun, index, array) => {
               return (
                 <Fragment key={`bun_sighting_${bun.id}`}>
-                  <BunSightingInfo bun={bun} now={now} location={location} />
+                  <BunSightingInfo
+                    bun={preProcessBunSighting(bun, now, location)}
+                  />
                   {index !== array.length - 1 && <Divider />}
                 </Fragment>
               );
