@@ -18,7 +18,9 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
   const classes = styles();
 
   const [numberOfBuns, setNumberOfBuns] = React.useState<number | "">("");
-  const [rankOfSmallestBun, setRankOfSmallestBun] = React.useState<string>("");
+  const [rankOfSmallestBun, setRankOfSmallestBun] = React.useState<
+    BunRanks | ""
+  >("");
 
   const hasError = () => {
     return numberOfBuns === "" || numberOfBuns <= 0 || rankOfSmallestBun === "";
@@ -77,7 +79,7 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
           id={`select-rank-of-buns`}
           label="Select the Approximate Length from Head to Tail of the Smallest Bun"
           onChange={(event) => {
-            setRankOfSmallestBun(event.target.value);
+            setRankOfSmallestBun(event.target.value as BunRanks | "");
           }}
           select
           value={rankOfSmallestBun}
@@ -143,7 +145,10 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
               (location) => {
                 recordBunSighting({
                   numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
-                  rankOfSmallestBun,
+                    rankOfSmallestBun:
+                      rankOfSmallestBun !== ""
+                        ? rankOfSmallestBun
+                        : "Peasent Bun",
                   timeOfSighting: Date.now(),
                   latitude: location.coords.latitude,
                   longitude: location.coords.longitude,
