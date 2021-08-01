@@ -1,14 +1,12 @@
 import { Divider, List } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { preProcessBunSighting } from "../../scripts/preProcessBunSightings";
 import BunSightingInfo from "../layouts/BunSightingInfo";
 import PageTemplate from "../layouts/PageTemplate";
 import Note from "../misc/Note";
-import { SetNotificationMessageProps } from "../misc/Notifications";
 import RequireLocationServices from "../misc/RequireLocationServices";
 
-declare interface FindBunsPageProps
-  extends RequiresAccessToLocationServices,
-    SetNotificationMessageProps {
+declare interface FindBunsPageProps extends RequiresAccessToLocationServices {
   location: GeoLocation | undefined;
   nearbyBuns: BunSighting[];
 }
@@ -17,7 +15,6 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
   accessToLocationServices,
   location,
   nearbyBuns,
-  setNotification,
 }) => {
   const [now, setNow] = React.useState<number>(Date.now());
 
@@ -42,7 +39,9 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
             {nearbyBuns.map((bun, index, array) => {
               return (
                 <Fragment key={`bun_sighting_${bun.id}`}>
-                  <BunSightingInfo bun={bun} now={now} location={location} />
+                  <BunSightingInfo
+                    bun={preProcessBunSighting(bun, now, location)}
+                  />
                   {index !== array.length - 1 && <Divider />}
                 </Fragment>
               );

@@ -120,7 +120,6 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
               accessToLocationServices={accessToLocationServices}
               location={location}
               nearbyBuns={nearbyBuns}
-              setNotification={setNotification}
             />
           </Route>
           <Route path="/settings" exact>

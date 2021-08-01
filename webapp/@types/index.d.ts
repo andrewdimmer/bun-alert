@@ -6,6 +6,11 @@ declare type BunRanks =
   | "Prince Bun"
   | "Peasent Bun";
 
+declare interface GeoLocation {
+  latitude: number;
+  longitude: number;
+}
+
 declare interface BunSighting extends GeoLocation {
   id: string;
   numberOfBuns: number;
@@ -13,11 +18,14 @@ declare interface BunSighting extends GeoLocation {
   timeOfSighting: number;
 }
 
-declare interface RequiresAccessToLocationServices {
-  accessToLocationServices: boolean | undefined;
+declare interface PreProcessedBunSighting extends BunSighting {
+  distanceAway: number;
+  distanceAwayText: string;
+  minutesSinceSighting: number;
+  minutesSinceSightingText: string;
+  googleMapsDirectionsLink: string;
 }
 
-declare interface GeoLocation {
-  latitude: number;
-  longitude: number;
+declare interface RequiresAccessToLocationServices {
+  accessToLocationServices: boolean | undefined;
 }
