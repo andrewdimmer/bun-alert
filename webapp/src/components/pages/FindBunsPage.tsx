@@ -3,20 +3,49 @@ import React, { Fragment } from "react";
 import { getBuns } from "../../data/localBuns";
 import BunSightingInfo from "../layouts/BunSightingInfo";
 import PageTemplate from "../layouts/PageTemplate";
+import { SetNotificationMessageProps } from "../misc/Notifications";
 import RequireLocationServices from "../misc/RequireLocationServices";
 
-declare interface FindBunsPageProps {}
+declare interface FindBunsPageProps extends SetNotificationMessageProps {}
 
-const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = () => {
+const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
+  setNotification,
+}) => {
   const [nearbyBuns, setNearbyBuns] = React.useState<BunSighting[]>(getBuns());
   const [now, setNow] = React.useState<number>(Date.now());
+  const [location, setLocation] =
+    React.useState<{ latitude: number; longitude: number }>();
 
+  // Time refresher
   React.useEffect(() => {
     const interval = setInterval(() => {
       setNow(Date.now());
     }, 60000);
     return () => {
       clearInterval(interval);
+    };
+  }, []);
+
+  // Location refresher
+  React.useEffect(() => {
+    const locationListener = navigator.geolocation.watchPosition(
+      (location) => {
+        setLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+      },
+      (error) => {
+        console.log(error);
+        setNotification({
+          type: "error",
+          message:
+            "Unable to get your location to find buns nearby. Please try again.",
+        });
+      }
+    );
+    return () => {
+      navigator.geolocation.clearWatch(locationListener);
     };
   }, []);
 

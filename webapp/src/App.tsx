@@ -52,7 +52,7 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
             <ReportBunPage setNotification={setNotification} />
           </Route>
           <Route path="/find-buns" exact>
-            <FindBunsPage />
+            <FindBunsPage setNotification={setNotification} />
           </Route>
           <Route path="/settings" exact>
             <SettingsPage />
