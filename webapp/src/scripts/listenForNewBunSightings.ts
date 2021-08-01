@@ -1,6 +1,12 @@
 import { NotificationMessage } from "../components/misc/Notifications";
 import { firestore } from "../config/firebaseConfig";
-import { addBun, deleteBun } from "../data/localBuns";
+import {
+  addBun,
+  deleteBun,
+  isInitialLoad,
+  runInitialLoad,
+} from "../data/notifiedBuns";
+import { sendBunAlertNotification } from "./sendBunAlertNotification";
 
 export const listenForNewBunSightings = (
   setNearbyBuns: (nearbyBuns: BunSighting[]) => void,
@@ -15,18 +21,24 @@ export const listenForNewBunSightings = (
         })
       );
 
-      // Update list of known buns
+      // Update list of known buns and send notifications of new bun alerts
       snapshot.docChanges().forEach((documentChange) => {
+        const bun = documentChange.doc.data() as BunSighting;
         if (documentChange.type === "added") {
-          addBun(documentChange.doc.data().id);
+          if (addBun(bun.id) && !isInitialLoad()) {
+            sendBunAlertNotification(bun);
+          }
         } else if (documentChange.type === "removed") {
-          deleteBun(documentChange.doc.data().id);
+          deleteBun(bun.id);
         } else {
           console.warn(
             "An existing Firebase document was changed. This should not happen!"
           );
         }
       });
+
+      // Start allowing notifications of new buns after the intial load
+      runInitialLoad();
     },
     (error) => {
       console.log(error);

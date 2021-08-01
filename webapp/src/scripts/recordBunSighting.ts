@@ -1,6 +1,6 @@
 import { NotificationMessage } from "../components/misc/Notifications";
 import { firestore } from "../config/firebaseConfig";
-import { addBun } from "../data/localBuns";
+import { addBun } from "../data/notifiedBuns";
 
 export const recordBunSighting = (
   bun: BunSighting,
