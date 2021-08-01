@@ -1,4 +1,5 @@
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 export const firebaseApp = firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -11,4 +12,7 @@ export const firebaseApp = firebase.initializeApp({
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 });
 
-export const firestore = firebaseApp.firestore().collection("hackathons").doc("SelfieHacks2021");
+export const firestore = firebaseApp
+  .firestore()
+  .collection("hackathons")
+  .doc("SelfieHacks2021");

@@ -6,6 +6,7 @@ import { Error } from "@material-ui/icons";
 import { recordBunSighting } from "../../scripts/recordBunSighting";
 import RequireLocationServices from "../misc/RequireLocationServices";
 import { SetNotificationMessageProps } from "../misc/Notifications";
+import { nanoid } from "nanoid";
 
 declare interface ReportBunPageProps
   extends RequiresAccessToLocationServices,
@@ -143,16 +144,20 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
           onClick={() => {
             navigator.geolocation.getCurrentPosition(
               (location) => {
-                recordBunSighting({
-                  numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
+                recordBunSighting(
+                  {
+                    id: nanoid(),
+                    numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
                     rankOfSmallestBun:
                       rankOfSmallestBun !== ""
                         ? rankOfSmallestBun
                         : "Peasent Bun",
-                  timeOfSighting: Date.now(),
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                });
+                    timeOfSighting: Date.now(),
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                  },
+                  setNotification
+                );
                 clear();
               },
               (error) => {

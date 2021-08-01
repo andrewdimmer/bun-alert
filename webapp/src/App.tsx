@@ -13,6 +13,7 @@ import FindBunsPage from "./components/pages/FindBunsPage";
 import HomePage from "./components/pages/HomePage";
 import ReportBunPage from "./components/pages/ReportBunPage";
 import SettingsPage from "./components/pages/SettingsPage";
+import { listenForNewBunSightings } from "./scripts/listenForNewBunSightings";
 
 declare interface AppProps {
   theme: "light" | "dark";
@@ -50,7 +51,18 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
     );
   }
 
-  React.useEffect(() => {}, []);
+  // Firestore Buns
+  const [nearbyBuns, setNearbyBuns] = React.useState<BunSighting[]>([]);
+
+  React.useEffect(() => {
+    const bunListener = listenForNewBunSightings(
+      setNearbyBuns,
+      setNotification
+    );
+    return () => {
+      bunListener();
+    };
+  }, []);
 
   return (
     <Router>
@@ -76,6 +88,7 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
           <Route path="/find-buns" exact>
             <FindBunsPage
               accessToLocationServices={accessToLocationServices}
+              nearbyBuns={nearbyBuns}
               setNotification={setNotification}
             />
           </Route>

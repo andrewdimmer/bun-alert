@@ -1,13 +1,13 @@
-const buns: BunSighting[] = [];
+const bunIds: string[] = [];
 
-export const getBuns = () => {
-  return buns;
+export const addBun = (bunId: string) => {
+  if (!bunIds.includes(bunId)) {
+    bunIds.push(bunId);
+  }
 };
 
-export const appendBun = (bun: BunSighting) => {
-  buns.push(bun);
-};
-
-export const deleteBun = (bun: BunSighting) => {
-  buns.splice(buns.indexOf(bun), 1);
+export const deleteBun = (bunId: string) => {
+  if (bunIds.includes(bunId)) {
+    bunIds.splice(bunIds.indexOf(bunId), 1);
+  }
 };
