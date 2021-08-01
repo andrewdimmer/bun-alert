@@ -13,6 +13,7 @@ import FindBunsPage from "./components/pages/FindBunsPage";
 import HomePage from "./components/pages/HomePage";
 import ReportBunPage from "./components/pages/ReportBunPage";
 import SettingsPage from "./components/pages/SettingsPage";
+import { setPreLoadedLocation } from "./data/preLoadedLocation";
 import { listenForNewBunSightings } from "./scripts/listenForNewBunSightings";
 
 declare interface AppProps {
@@ -51,6 +52,35 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
     );
   }
 
+  // Location refresher
+  const [location, setLocation] = React.useState<GeoLocation>();
+
+  React.useEffect(() => {
+    if (accessToLocationServices === true) {
+      const locationListener = navigator.geolocation.watchPosition(
+        (location) => {
+          const newLocation = {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          };
+          setLocation(newLocation);
+          setPreLoadedLocation(newLocation);
+        },
+        (error) => {
+          console.log(error);
+          setNotification({
+            type: "error",
+            message:
+              "Unable to get your location to find buns nearby. Please try again.",
+          });
+        }
+      );
+      return () => {
+        navigator.geolocation.clearWatch(locationListener);
+      };
+    }
+  }, [accessToLocationServices]);
+
   // Firestore Buns
   const [nearbyBuns, setNearbyBuns] = React.useState<BunSighting[]>([]);
 
@@ -88,6 +118,7 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
           <Route path="/find-buns" exact>
             <FindBunsPage
               accessToLocationServices={accessToLocationServices}
+              location={location}
               nearbyBuns={nearbyBuns}
               setNotification={setNotification}
             />

@@ -7,6 +7,7 @@ import { recordBunSighting } from "../../scripts/recordBunSighting";
 import RequireLocationServices from "../misc/RequireLocationServices";
 import { SetNotificationMessageProps } from "../misc/Notifications";
 import { nanoid } from "nanoid";
+import { getPreLoadedLocation } from "../../data/preLoadedLocation";
 
 declare interface ReportBunPageProps
   extends RequiresAccessToLocationServices,
@@ -142,33 +143,30 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
           disabled={hasError()}
           fullWidth
           onClick={() => {
-            navigator.geolocation.getCurrentPosition(
-              (location) => {
-                recordBunSighting(
-                  {
-                    id: nanoid(),
-                    numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
-                    rankOfSmallestBun:
-                      rankOfSmallestBun !== ""
-                        ? rankOfSmallestBun
-                        : "Peasent Bun",
-                    timeOfSighting: Date.now(),
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                  },
-                  setNotification
-                );
-                clear();
-              },
-              (error) => {
-                console.log(error);
-                setNotification({
-                  type: "error",
-                  message:
-                    "Unable to get your location to create a Bun Sighting. Please try again.",
-                });
-              }
-            );
+            const location = getPreLoadedLocation();
+            if (location) {
+              recordBunSighting(
+                {
+                  id: nanoid(),
+                  numberOfBuns: numberOfBuns !== "" ? numberOfBuns : 1,
+                  rankOfSmallestBun:
+                    rankOfSmallestBun !== ""
+                      ? rankOfSmallestBun
+                      : "Peasent Bun",
+                  timeOfSighting: Date.now(),
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                },
+                setNotification
+              );
+              clear();
+            } else {
+              setNotification({
+                type: "error",
+                message:
+                  "Unable to get your location to create a Bun Sighting. Please try again.",
+              });
+            }
           }}
           variant="contained"
         >

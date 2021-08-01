@@ -9,16 +9,17 @@ import RequireLocationServices from "../misc/RequireLocationServices";
 declare interface FindBunsPageProps
   extends RequiresAccessToLocationServices,
     SetNotificationMessageProps {
+  location: GeoLocation | undefined;
   nearbyBuns: BunSighting[];
 }
 
 const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
   accessToLocationServices,
+  location,
   nearbyBuns,
   setNotification,
 }) => {
   const [now, setNow] = React.useState<number>(Date.now());
-  const [location, setLocation] = React.useState<GeoLocation>();
 
   // Time refresher
   React.useEffect(() => {
@@ -29,29 +30,6 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
       clearInterval(interval);
     };
   }, []);
-
-  // Location refresher
-  React.useEffect(() => {
-    const locationListener = navigator.geolocation.watchPosition(
-      (location) => {
-        setLocation({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        });
-      },
-      (error) => {
-        console.log(error);
-        setNotification({
-          type: "error",
-          message:
-            "Unable to get your location to find buns nearby. Please try again.",
-        });
-      }
-    );
-    return () => {
-      navigator.geolocation.clearWatch(locationListener);
-    };
-  }, [setNotification]);
 
   return (
     <PageTemplate heading="Find Nearby Buns!" title="Find Buns">
