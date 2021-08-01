@@ -1,4 +1,5 @@
 import { getDistance } from "geolib";
+import { getStoredBunFilterParameters } from "../data/storedSettings";
 import { getDurationInMinutes } from "../helpers/getDurationInMinutes";
 import { getGoogleMapsDirections } from "../helpers/getGoogleMapsDirections";
 import { metersToMiles } from "../helpers/metersToMiles";
@@ -23,6 +24,16 @@ export const preProcessBunSighting = (
       ? `${distanceAway} mile${distanceAway !== 1 ? "s" : ""} away`
       : "";
 
+  // Determine Bun Sighting Estimated Arrival Text
+  const estimatedArrival = calculateEstimatedMinutesAway(distanceAway);
+
+  const estimatedArrivalText =
+    estimatedArrival !== -1
+      ? `about ${estimatedArrival} minute${
+          estimatedArrival !== 1 ? "s" : ""
+        } away`
+      : "";
+
   // Determine Bun Sighting Duration Text
   const minutesSinceSighting = getDurationInMinutes(bun.timeOfSighting, now);
   const minutesSinceSightingText =
@@ -42,8 +53,23 @@ export const preProcessBunSighting = (
     rankAndOtherBuns,
     distanceAway,
     distanceAwayText,
+    estimatedArrival,
+    estimatedArrivalText,
     minutesSinceSighting,
     minutesSinceSightingText,
     googleMapsDirectionsLink,
   };
+};
+
+export const calculateEstimatedMinutesAway = (distanceAway: number) => {
+  const bunFilterParameters = getStoredBunFilterParameters();
+  if (distanceAway !== -1) {
+    return Math.round(
+      (distanceAway /
+        (bunFilterParameters.walkingSpeed *
+          bunFilterParameters.detourCoefficent)) *
+        60
+    );
+  }
+  return -1;
 };
