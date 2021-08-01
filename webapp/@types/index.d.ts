@@ -22,6 +22,8 @@ declare interface PreProcessedBunSighting extends BunSighting {
   rankAndOtherBuns: string;
   distanceAway: number;
   distanceAwayText: string;
+  estimatedArrival: number;
+  estimatedArrivalText: string;
   minutesSinceSighting: number;
   minutesSinceSightingText: string;
   googleMapsDirectionsLink: string;

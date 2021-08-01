@@ -18,9 +18,13 @@ const BunSightingInfo: React.FunctionComponent<BunSightingInfoProps> = ({
   bun,
 }) => {
   const primaryText = `${bun.rankAndOtherBuns} sighted nearby!`;
-  const secondaryText = `Sighted ${bun.minutesSinceSightingText}${
-    bun.distanceAwayText ? " | " : ""
-  }${bun.distanceAwayText}`;
+  const mergedDistanceAwayText = bun.distanceAwayText
+    ? ` | ${bun.distanceAwayText}`
+    : "";
+  const mergedTimeAwayText = bun.estimatedArrivalText
+    ? ` (${bun.estimatedArrivalText})`
+    : "";
+  const secondaryText = `Sighted ${bun.minutesSinceSightingText}${mergedDistanceAwayText}${mergedTimeAwayText}`;
 
   return (
     <ListItem>

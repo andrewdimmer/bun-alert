@@ -3,19 +3,6 @@ import { getStoredBunFilterParameters } from "../data/storedSettings";
 import { purgeBunAlertIfStale } from "./pergeBunAlertIfStale";
 import { preProcessBunSighting } from "./preProcessBunSightings";
 
-export const calculateEstimatedMinutesAway = (bun: PreProcessedBunSighting) => {
-  const bunFilterParameters = getStoredBunFilterParameters();
-  if (bun.distanceAway !== -1) {
-    return Math.round(
-      (bun.distanceAway /
-        (bunFilterParameters.walkingSpeed *
-          bunFilterParameters.detourCoefficent)) *
-        60
-    );
-  }
-  return -1;
-};
-
 export const bunMatchesFilters = (bun: PreProcessedBunSighting) => {
   const bunFilterParameters = getStoredBunFilterParameters();
 
@@ -31,7 +18,7 @@ export const bunMatchesFilters = (bun: PreProcessedBunSighting) => {
 
   // Omit all buns with a Bun Alert Freshness Score above the max alert age
   if (
-    bun.minutesSinceSighting + calculateEstimatedMinutesAway(bun) >
+    bun.minutesSinceSighting + bun.estimatedArrival >
     bunFilterParameters.maxAlertAge
   ) {
     return false;
@@ -73,9 +60,8 @@ const bunComparator = (
 ) => {
   const timeToArriveDiff =
     bun1.minutesSinceSighting +
-    calculateEstimatedMinutesAway(bun1) -
-    bun2.minutesSinceSighting +
-    calculateEstimatedMinutesAway(bun2);
+    bun1.estimatedArrival -
+    (bun2.minutesSinceSighting + bun2.estimatedArrival);
   if (timeToArriveDiff !== 0) {
     return timeToArriveDiff;
   }
