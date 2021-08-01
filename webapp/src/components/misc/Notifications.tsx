@@ -107,9 +107,12 @@ declare interface NotificationMessageInterface {
 
 export type NotificationMessage = NotificationMessageInterface | null;
 
-declare interface MessageProps {
-  notification: NotificationMessage;
+export interface SetNotificationMessageProps {
   setNotification: (notificationMessage: NotificationMessage) => void;
+}
+
+declare interface MessageProps extends SetNotificationMessageProps {
+  notification: NotificationMessage;
 }
 
 export default function NotificationBar({

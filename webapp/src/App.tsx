@@ -49,10 +49,10 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
             <AboutPage />
           </Route>
           <Route path="/report-bun" exact>
-            <ReportBunPage />
+            <ReportBunPage setNotification={setNotification} />
           </Route>
           <Route path="/find-buns" exact>
-            <FindBunsPage />
+            <FindBunsPage setNotification={setNotification} />
           </Route>
           <Route path="/settings" exact>
             <SettingsPage />
