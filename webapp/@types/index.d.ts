@@ -19,6 +19,7 @@ declare interface BunSighting extends GeoLocation {
 }
 
 declare interface PreProcessedBunSighting extends BunSighting {
+  rankAndOtherBuns: string;
   distanceAway: number;
   distanceAwayText: string;
   minutesSinceSighting: number;

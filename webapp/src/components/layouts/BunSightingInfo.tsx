@@ -17,15 +17,10 @@ declare interface BunSightingInfoProps {
 const BunSightingInfo: React.FunctionComponent<BunSightingInfoProps> = ({
   bun,
 }) => {
-  // Determine Bun Sighting Primary Text
-  const otherBuns =
-    bun.numberOfBuns > 1
-      ? ` + ${bun.numberOfBuns - 1} other${bun.numberOfBuns !== 2 ? "s" : ""}`
-      : "";
-  const primaryText = `${bun.rankOfSmallestBun}${otherBuns} sighted nearby!`;
-
-  // Determine Bun Sighting Secondary Text
-  const secondaryText = `Sighted ${bun.minutesSinceSightingText}${bun.distanceAwayText}`;
+  const primaryText = `${bun.rankAndOtherBuns} sighted nearby!`;
+  const secondaryText = `Sighted ${bun.minutesSinceSightingText}${
+    bun.distanceAwayText ? " | " : ""
+  }${bun.distanceAwayText}`;
 
   return (
     <ListItem>

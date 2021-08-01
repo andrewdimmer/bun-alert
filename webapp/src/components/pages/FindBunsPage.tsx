@@ -2,8 +2,8 @@ import { Divider, List } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { preProcessBunSighting } from "../../scripts/preProcessBunSightings";
 import BunSightingInfo from "../layouts/BunSightingInfo";
-import PageTemplate from "../layouts/PageTemplate";
 import Note from "../layouts/Note";
+import PageTemplate from "../layouts/PageTemplate";
 import RequireLocationServices from "../misc/RequireLocationServices";
 
 declare interface FindBunsPageProps extends RequiresAccessToLocationServices {

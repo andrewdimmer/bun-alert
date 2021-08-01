@@ -8,13 +8,19 @@ export const preProcessBunSighting = (
   now: number,
   location: GeoLocation | undefined
 ) => {
+  const otherBuns =
+    bun.numberOfBuns > 1
+      ? ` + ${bun.numberOfBuns - 1} other${bun.numberOfBuns !== 2 ? "s" : ""}`
+      : "";
+  const rankAndOtherBuns = `${bun.rankOfSmallestBun}${otherBuns}`;
+
   // Determine Bun Sighting Distance Text
   const distanceAway = location
     ? Math.round(metersToMiles(getDistance(location, bun)) * 100) / 100
     : -1;
   const distanceAwayText =
     distanceAway !== -1
-      ? ` | ${distanceAway} mile${distanceAway !== 1 ? "s" : ""} away`
+      ? `${distanceAway} mile${distanceAway !== 1 ? "s" : ""} away`
       : "";
 
   // Determine Bun Sighting Duration Text
@@ -33,6 +39,7 @@ export const preProcessBunSighting = (
 
   return {
     ...bun,
+    rankAndOtherBuns,
     distanceAway,
     distanceAwayText,
     minutesSinceSighting,
