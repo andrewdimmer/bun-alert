@@ -18,8 +18,7 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
   setNotification,
 }) => {
   const [now, setNow] = React.useState<number>(Date.now());
-  const [location, setLocation] =
-    React.useState<{ latitude: number; longitude: number }>();
+  const [location, setLocation] = React.useState<GeoLocation>();
 
   // Time refresher
   React.useEffect(() => {
