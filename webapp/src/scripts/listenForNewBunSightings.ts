@@ -6,6 +6,9 @@ import {
   isInitialLoad,
   runInitialLoad,
 } from "../data/notifiedBuns";
+import { getPreLoadedLocation } from "../data/preLoadedLocation";
+import { bunMatchesFilters } from "./filterAndSortBunSightings";
+import { preProcessBunSighting } from "./preProcessBunSightings";
 import { sendBunAlertNotification } from "./sendBunAlertNotification";
 
 export const listenForNewBunSightings = (
@@ -25,8 +28,17 @@ export const listenForNewBunSightings = (
       snapshot.docChanges().forEach((documentChange) => {
         const bun = documentChange.doc.data() as BunSighting;
         if (documentChange.type === "added") {
-          if (addBun(bun.id) && !isInitialLoad()) {
-            sendBunAlertNotification(bun);
+          const preProcessedBun = preProcessBunSighting(
+            bun,
+            Date.now(),
+            getPreLoadedLocation()
+          );
+          if (
+            bunMatchesFilters(preProcessedBun) &&
+            addBun(bun.id) &&
+            !isInitialLoad()
+          ) {
+            sendBunAlertNotification(preProcessedBun);
           }
         } else if (documentChange.type === "removed") {
           deleteBun(bun.id);

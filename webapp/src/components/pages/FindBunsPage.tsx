@@ -1,6 +1,6 @@
 import { Divider, List } from "@material-ui/core";
 import React, { Fragment } from "react";
-import { preProcessBunSighting } from "../../scripts/preProcessBunSightings";
+import { preProcessFilterAndSortBuns } from "../../scripts/filterAndSortBunSightings";
 import BunSightingInfo from "../layouts/BunSightingInfo";
 import Note from "../layouts/Note";
 import PageTemplate from "../layouts/PageTemplate";
@@ -8,25 +8,36 @@ import RequireLocationServices from "../misc/RequireLocationServices";
 
 declare interface FindBunsPageProps extends RequiresAccessToLocationServices {
   location: GeoLocation | undefined;
-  nearbyBuns: BunSighting[];
+  allBuns: BunSighting[];
 }
 
 const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
   accessToLocationServices,
   location,
-  nearbyBuns,
+  allBuns,
 }) => {
-  const [now, setNow] = React.useState<number>(Date.now());
+  const allBunsToNearbyBuns = (
+    buns: BunSighting[],
+    now: number,
+    location: GeoLocation | undefined
+  ) => {
+    return location ? preProcessFilterAndSortBuns(buns, now, location) : [];
+  };
+
+  const [nearbyBuns, setNearbyBuns] = React.useState(
+    allBunsToNearbyBuns(allBuns, Date.now(), location)
+  );
 
   // Time refresher
   React.useEffect(() => {
+    setNearbyBuns(allBunsToNearbyBuns(allBuns, Date.now(), location));
     const interval = setInterval(() => {
-      setNow(Date.now());
+      setNearbyBuns(allBunsToNearbyBuns(allBuns, Date.now(), location));
     }, 60000);
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [allBuns, location]);
 
   return (
     <PageTemplate heading="Find Nearby Buns!" title="Find Buns">
@@ -40,9 +51,7 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
             {nearbyBuns.map((bun, index, array) => {
               return (
                 <Fragment key={`bun_sighting_${bun.id}`}>
-                  <BunSightingInfo
-                    bun={preProcessBunSighting(bun, now, location)}
-                  />
+                  <BunSightingInfo bun={bun} />
                   {index !== array.length - 1 && <Divider />}
                 </Fragment>
               );

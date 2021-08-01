@@ -30,3 +30,17 @@ declare interface PreProcessedBunSighting extends BunSighting {
 declare interface RequiresAccessToLocationServices {
   accessToLocationServices: boolean | undefined;
 }
+
+declare interface BunFilterParameters {
+  maxAlertAge: number;
+  maxDistanceAway: number;
+  walkingSpeed: number;
+  detourCoefficent: number;
+}
+
+declare interface EditableBunFilterParameters extends BunFilterParameters {
+  maxAlertAge: number | "";
+  maxDistanceAway: number | "";
+  walkingSpeed: number | "";
+  detourCoefficent: number | "";
+}
