@@ -23,13 +23,13 @@ export const sendBunAlertNotification = (bun: PreProcessedBunSighting) => {
       : "";
 
     new Notification("BUN ALERT!", {
-      badge: "%PUBLIC_URL%logo512.png",
+      badge: "/bun-alert/logo512.png",
       body: `${
         bun.rankAndOtherBuns
       } sighted${notificationDistanceText}. Learn more on the "Find Buns" page. ${addBunnyEmojis(
         bun.numberOfBuns
       )}`,
-      icon: "%PUBLIC_URL%logo512.png",
+      icon: "/bun-alert/logo512.png",
       // image: "", // TODO: Add once Image Support is Added
     });
   }
