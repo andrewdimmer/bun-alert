@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { preProcessBunSighting } from "../../scripts/preProcessBunSightings";
 import BunSightingInfo from "../layouts/BunSightingInfo";
 import PageTemplate from "../layouts/PageTemplate";
-import Note from "../misc/Note";
+import Note from "../layouts/Note";
 import RequireLocationServices from "../misc/RequireLocationServices";
 
 declare interface FindBunsPageProps extends RequiresAccessToLocationServices {
@@ -32,6 +32,7 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
     <PageTemplate heading="Find Nearby Buns!" title="Find Buns">
       <RequireLocationServices
         accessToLocationServices={accessToLocationServices}
+        prefix="Location Services are required to find nearby buns!"
         message="We need to know where you are to show you nearby buns... please enable location services to find buns."
       >
         {nearbyBuns.length > 0 ? (

@@ -37,6 +37,7 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
     <PageTemplate heading="Report a Bun Sighting" title="Report Bun">
       <RequireLocationServices
         accessToLocationServices={accessToLocationServices}
+        prefix="Location Services are required to report bun sightings!"
         message="We need to know where you've found your bun... please enable location services to report a bun sighting."
       >
         {/* Number of Buns */}

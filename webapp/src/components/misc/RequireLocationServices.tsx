@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import Note from "./Note";
+import Note from "../layouts/Note";
 
 declare interface RequireLocationServicesProps
   extends RequiresAccessToLocationServices {
@@ -10,7 +10,7 @@ declare interface RequireLocationServicesProps
 const RequireLocationServices: React.FunctionComponent<RequireLocationServicesProps> =
   ({
     accessToLocationServices,
-    prefix = "Location Services is Required!",
+    prefix = "Location Services are required!",
     message = "Please enable location services to access this page.",
     children,
   }) => {

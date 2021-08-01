@@ -8,9 +8,9 @@ declare interface PageTemplateProps {
 }
 
 const PageTemplate: React.FunctionComponent<PageTemplateProps> = ({
+  children,
   heading,
   title = heading,
-  children,
 }) => {
   const classes = styles();
 

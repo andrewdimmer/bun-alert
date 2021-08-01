@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LeftMenu from "./components/layouts/LeftMenu";
 import NavBar from "./components/layouts/NavBar";
 import BugReportFab from "./components/misc/BugReportFab";
+import NotificationInfoManager from "./components/misc/NotificationInfoManager";
 import NotificationBar, {
   NotificationMessage,
 } from "./components/misc/Notifications";
@@ -102,6 +103,9 @@ const App: React.FunctionComponent<AppProps> = ({ theme, toggleTheme }) => {
         toggleLeftMenu={toggleLeftMenu}
       />
       <Container>
+        <NotificationInfoManager
+          accessToLocationServices={accessToLocationServices}
+        />
         <Switch>
           <Route path="/" exact>
             <HomePage />

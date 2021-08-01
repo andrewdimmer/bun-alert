@@ -1,8 +1,10 @@
 import { getPreLoadedLocation } from "../data/preLoadedLocation";
 import { preProcessBunSighting } from "./preProcessBunSightings";
 
+export const browserSupportsNotifications = "Notification" in window;
+
 export const sendBunAlertNotification = (bunSighting: BunSighting) => {
-  if (Notification.permission === "granted") {
+  if (browserSupportsNotifications && Notification.permission === "granted") {
     const bun = preProcessBunSighting(
       bunSighting,
       Date.now(),
