@@ -7,9 +7,12 @@ import { recordBunSighting } from "../../scripts/recordBunSighting";
 import RequireLocationServices from "../misc/RequireLocationServices";
 import { SetNotificationMessageProps } from "../misc/Notifications";
 
-declare interface ReportBunPageProps extends SetNotificationMessageProps {}
+declare interface ReportBunPageProps
+  extends RequiresAccessToLocationServices,
+    SetNotificationMessageProps {}
 
 const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
+  accessToLocationServices,
   setNotification,
 }) => {
   const classes = styles();
@@ -22,13 +25,16 @@ const ReportBunPage: React.FunctionComponent<ReportBunPageProps> = ({
   };
 
   const clear = () => {
-    setNumberOfBuns(0);
+    setNumberOfBuns("");
     setRankOfSmallestBun("");
   };
 
   return (
     <PageTemplate heading="Report a Bun Sighting" title="Report Bun">
-      <RequireLocationServices message="We need to know where you've found your bun... please enable location services to report a bun sighting.">
+      <RequireLocationServices
+        accessToLocationServices={accessToLocationServices}
+        message="We need to know where you've found your bun... please enable location services to report a bun sighting."
+      >
         {/* Number of Buns */}
         <TextField
           className={classes.marginedTopBottom}

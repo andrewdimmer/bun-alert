@@ -7,9 +7,12 @@ import Note from "../misc/Note";
 import { SetNotificationMessageProps } from "../misc/Notifications";
 import RequireLocationServices from "../misc/RequireLocationServices";
 
-declare interface FindBunsPageProps extends SetNotificationMessageProps {}
+declare interface FindBunsPageProps
+  extends RequiresAccessToLocationServices,
+    SetNotificationMessageProps {}
 
 const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
+  accessToLocationServices,
   setNotification,
 }) => {
   const [nearbyBuns, setNearbyBuns] = React.useState<BunSighting[]>(getBuns());
@@ -48,11 +51,14 @@ const FindBunsPage: React.FunctionComponent<FindBunsPageProps> = ({
     return () => {
       navigator.geolocation.clearWatch(locationListener);
     };
-  }, []);
+  }, [setNotification]);
 
   return (
     <PageTemplate heading="Find Nearby Buns!" title="Find Buns">
-      <RequireLocationServices message="We need to know where you are to show you nearby buns... please enable location services to find buns.">
+      <RequireLocationServices
+        accessToLocationServices={accessToLocationServices}
+        message="We need to know where you are to show you nearby buns... please enable location services to find buns."
+      >
         {nearbyBuns.length > 0 ? (
           <List>
             {nearbyBuns.map((bun, index, array) => {

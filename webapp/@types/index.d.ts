@@ -5,3 +5,7 @@ declare interface BunSighting {
   latitude: number;
   longitude: number;
 }
+
+declare interface RequiresAccessToLocationServices {
+  accessToLocationServices: boolean | undefined;
+}
